@@ -18,3 +18,14 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # 데이터베이스 모델을 구성할 때 사용되는 클래스
 Base = declarative_base()
+
+
+# db 세션 객체를 리턴하는 제너레이터 함수
+# import contextlib
+# @contextlib.contextmanager # Depends 사용시 제거해줘야함
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
