@@ -23,3 +23,4 @@ class Answer(Base):
     question_id = Column(Integer, ForeignKey("question.id"))
     question = relationship("Question", backref="answers")
     
+    

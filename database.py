@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# 데이터베이스 접속 주소
+# 데이터베이스 접속 주소 (sqlite 사용)
 SQLALCHEMY_DATABASE_URL = "sqlite:///./myapi.db"
 
 engine = create_engine(
