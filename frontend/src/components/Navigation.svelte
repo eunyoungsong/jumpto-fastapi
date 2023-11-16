@@ -21,21 +21,20 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {#if $is_login }
                     <li class="nav-item">
-                        <!-- <a use:link href="/user-login" class="nav-link">로그아웃 ({$username})</a> -->
                         <a use:link href="/user-login" class="nav-link" on:click={() => {
                             $access_token = ''
                             $username = ''
                             $is_login = false
                         }}>로그아웃 ({$username})</a>
-                </li>
+                    </li>
                 {:else}
                     <li class="nav-item">
                         <a use:link class="nav-link" href="/user-create">회원가입</a>
-                </li>
+                    </li>
                     <li class="nav-item">
                         <a use:link class="nav-link" href="/user-login">로그인</a>
-                </li>
-            {/if}
+                    </li>
+                {/if}
             </ul>
         </div>
     </div>

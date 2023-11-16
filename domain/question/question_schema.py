@@ -1,6 +1,8 @@
 import datetime
+from typing import Union
 from pydantic import BaseModel, field_validator
 from domain.answer.answer_schema import Answer
+from domain.user.user_schema import User
 
 # 질문 스키마
 class Question(BaseModel):
@@ -9,6 +11,7 @@ class Question(BaseModel):
     content:str
     create_date:datetime.datetime
     answers: list[Answer] = []
+    user: Union[User, None]
 
     # Question 모델의 항목들이 자동으로 Question 스키마로 매핑된다.
     class Config:

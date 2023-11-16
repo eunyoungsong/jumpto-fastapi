@@ -25,3 +25,10 @@ class Token(BaseModel):
     access_token:str
     token_type:str
     username:str
+    
+    
+# API 출력 항목에 글쓴이 추가하기
+class User(BaseModel):
+    id: int
+    username: str
+    email: str

@@ -1,6 +1,7 @@
 import datetime
-
+from typing import Union
 from pydantic import BaseModel, validator
+from domain.user.user_schema import User
 
 
 class AnswerCreate(BaseModel):
@@ -21,6 +22,7 @@ class Answer(BaseModel):
     id: int
     content: str
     create_date: datetime.datetime
+    user: Union[User, None]
 
     class Config:
         orm_mode = True
