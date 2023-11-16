@@ -34,3 +34,9 @@ class QuestionCreate(BaseModel):
 class QuestionList(BaseModel):
     total: int = 0
     question_list: list[Question] = []
+    
+
+
+# 질문 수정 스키마
+class QuestionUpdate(QuestionCreate):
+    question_id: int

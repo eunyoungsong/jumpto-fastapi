@@ -1,6 +1,6 @@
 # 라우터 파일에 반드시 필요한 것은 APIRouter 클래스로 생성한 router 객체이다. 
 # router 객체를 생성하여 FastAPI 앱에 등록해야만 라우팅 기능이 동작한다.
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from database import get_db
@@ -70,3 +70,20 @@ def question_list(db: Session = Depends(get_db),
         'total': total,
         'question_list': _question_list
     } # response_model 인 QuestionList 스키마 속성과 매핑되는 값을 리턴해야함
+
+
+
+# 질문 수정 라우터
+@router.put("/update", status_code=status.HTTP_204_NO_CONTENT)
+def question_update(_question_update: question_schema.QuestionUpdate,
+                    db: Session = Depends(get_db),
+                    current_user: User = Depends(get_current_user)):
+    db_question = question_crud.get_question(db, question_id=_question_update.question_id)
+    if not db_question:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="데이터를 찾을수 없습니다.")
+    if current_user.id != db_question.user.id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="수정 권한이 없습니다.")
+    question_crud.update_question(db=db, db_question=db_question,
+                                  question_update=_question_update)
