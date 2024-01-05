@@ -78,12 +78,34 @@ def question_list(db: Session = Depends(get_db),
 def question_update(_question_update: question_schema.QuestionUpdate,
                     db: Session = Depends(get_db),
                     current_user: User = Depends(get_current_user)):
+    
+    # 데이터베이스에서 질문을 가져옵니다.
     db_question = question_crud.get_question(db, question_id=_question_update.question_id)
+    
+    # 가져온 질문이 없으면 400 Bad Request를 발생시킵니다.
+    if not db_question:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="데이터를 찾을수 없습니다.")
+        
+    # 현재 사용자가 질문을 작성한 사용자인지 확인합니다.
+    if current_user.id != db_question.user.id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="수정 권한이 없습니다.")
+
+    # 질문을 업데이트합니다.
+    question_crud.update_question(db=db, db_question=db_question, question_update=_question_update)
+
+
+# 질문 삭제 라우터 
+@router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
+def question_delete(_question_delete: question_schema.QuestionDelete,
+                    db: Session = Depends(get_db),
+                    current_user: User = Depends(get_current_user)):
+    db_question = question_crud.get_question(db, question_id=_question_delete.question_id)
     if not db_question:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="데이터를 찾을수 없습니다.")
     if current_user.id != db_question.user.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="수정 권한이 없습니다.")
-    question_crud.update_question(db=db, db_question=db_question,
-                                  question_update=_question_update)
+                            detail="삭제 권한이 없습니다.")
+    question_crud.delete_question(db=db, db_question=db_question)

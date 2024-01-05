@@ -40,3 +40,8 @@ class QuestionList(BaseModel):
 # 질문 수정 스키마
 class QuestionUpdate(QuestionCreate):
     question_id: int
+
+
+# 질문 삭제 스키마
+class QuestionDelete(BaseModel):
+    question_id: int
